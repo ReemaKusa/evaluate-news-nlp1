@@ -1,28 +1,50 @@
+const path = require('path');
+const express = require('express');
+const bodyParser = require('body-parser');
+const dotenv = require('dotenv');
+const cors = require('cors');
 
-const express = require("express");
-const cors = require("cors");
-const bodyParser = require("body-parser");
-require("dotenv").config();
-const path = require("path");  // Add this to serve static files
-
-const fetch = (...args) => import('node-fetch').then(({ default: fetch }) => fetch(...args));
+// Load environment variables
+dotenv.config();
 
 const app = express();
+
+// Middleware
 app.use(cors());
 app.use(bodyParser.json());
+app.use(express.static(path.join(__dirname, '../../dist'))); // Ensure this path is correct
 
+// Debugging to check if API_URL is set
+if (!process.env.API_URL) {
+    console.error("Error: API_URL is not defined! Check your .env file.");
+    process.exit(1); // Exit if API URL is missing
+} else {
+    console.log(`API URL Loaded: ${process.env.API_URL}`);
+}
 
-app.use(express.static(path.resolve(__dirname, '/dist')));
+// Serve the main index.html file
+app.get('/', (req, res) => {
+    res.sendFile(path.join(__dirname, '../../dist', 'index.html')); // Ensure this path is correct
+});
 
+// Use API URL from .env file
+const apiUrl = process.env.API_URL;
 
-const apiUrl = "https://kooye7u703.execute-api.us-east-1.amazonaws.com/NLPAnalyzer";
+app.post('/analyze', async (req, res) => {
+    const { text } = req.body;
 
-app.post("/analyze", async (req, res) => {
+    if (!text) {
+        return res.status(400).json({ error: 'Text input is required' });
+    }
+
     try {
+        const fetch = (await import('node-fetch')).default; // Dynamic import
         const response = await fetch(apiUrl, {
             method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ text: req.body.text })
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({ text })
         });
 
         if (!response.ok) {
@@ -30,16 +52,16 @@ app.post("/analyze", async (req, res) => {
         }
 
         const data = await response.json();
-        res.send(data);
+        res.json(data);
     } catch (error) {
         console.error("Error fetching API:", error);
-        res.status(500).send({ error: "Internal Server Error" });
+        res.status(500).json({ error: 'Error fetching data from NLPAnalyzer API' });
     }
 });
 
-// Serve index.html on the root route
-app.get("/", (req, res) => {
-    res.sendFile(path.resolve(__dirname, "/dist/index.html"));
+// Start the server
+const PORT = process.env.PORT || 8081;
+app.listen(PORT, () => {
+    console.log(`Server is running on port ${PORT}!`);
+    console.log(`http://localhost:${PORT}`);
 });
-
-app.listen(8081, () => console.log("Server running on port 8081"));

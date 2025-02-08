@@ -1,33 +1,41 @@
 const path = require('path');
+const HtmlWebpackPlugin = require('html-webpack-plugin');
+const { CleanWebpackPlugin } = require('clean-webpack-plugin');
+const webpack = require('webpack');
+const { GenerateSW } = require('workbox-webpack-plugin');
 
 module.exports = {
-  entry: '/src/server/index.js', // Entry point of your application
-  output: {
-    path: path.resolve(__dirname, 'dist'),
-    filename: 'bundle.js', // Output bundle file
-  },
-  mode: 'production', // Set mode to 'production' for optimized builds
-  module: {
-    rules: [
-      {
-        test: /\.js$/,
-        exclude: /node_modules/,
-        use: {
-          loader: 'babel-loader', // Ensures compatibility with older browsers
-        },
-      },
-      {
-        test: /\.css$/, // Handling CSS files
-        use: ['style-loader', 'css-loader'],
-      },
-      {
-        test: /\.html$/, // Handle HTML files
-        use: 'html-loader',
-      },
+    entry: './src/client/index.js', // Fixed incorrect entry path
+    output: {
+        path: path.resolve(__dirname, 'dist'),
+        filename: 'bundle.js',
+    },
+    mode: 'production',
+    module: {
+        rules: [
+            {
+                test: /\.js$/,
+                exclude: /node_modules/,
+                use: 'babel-loader',
+            },
+            {
+              test: /\.css$/i, 
+                use: ['style-loader', 'css-loader'],
+            },
+        ],
+    },
+    plugins: [
+        new HtmlWebpackPlugin({
+            template: './src/client/views/index.html', 
+            filename: 'index.html',
+        }),
+        new CleanWebpackPlugin(),
+        new webpack.DefinePlugin({
+          'process.env.API_URL': JSON.stringify(process.env.API_URL),
+        }),
+        new GenerateSW({
+            clientsClaim: true,
+            skipWaiting: true,
+        }),
     ],
-  },
-  plugins: [
-    // Add any necessary plugins, like CleanWebpackPlugin to clean the dist folder
-  ],
 };
-

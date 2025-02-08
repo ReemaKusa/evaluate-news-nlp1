@@ -1,19 +1,40 @@
-const NodePolyfillPlugin = require("node-polyfill-webpack-plugin");
+const path = require('path');
+const HtmlWebpackPlugin = require('html-webpack-plugin');
+const { CleanWebpackPlugin } = require('clean-webpack-plugin');
+const webpack = require('webpack');
 
 module.exports = {
-  // other configurations...
-  resolve: {
-    fallback: {
-      "stream": require.resolve("stream-browserify"),
-      "url": require.resolve("url"),
-      "util": require.resolve("util"),
-      "zlib": require.resolve("browserify-zlib"),
-    }
-  },
-  stats: {
-    errorDetails: true,  // This will show detailed error information in the console
-  },
-  plugins: [
-    new NodePolyfillPlugin()
-  ]
+    entry: './src/client/index.js',
+    output: {
+        path: path.resolve(__dirname, 'dist'),
+        filename: 'bundle.js',
+    },
+    mode: 'production',
+    module: {
+        rules: [
+            {
+                test: /\.js$/,
+                exclude: /node_modules/,
+                use: 'babel-loader',
+            },
+            {
+                test: /\.s[ac]ss$/i,
+                use: [
+                    'style-loader',
+                    'css-loader',
+                    'sass-loader',
+                ],
+            },
+        ],
+    },
+    plugins: [
+        new HtmlWebpackPlugin({
+            template: './src/client/views/index.html',
+            filename: 'index.html',
+        }),
+        new CleanWebpackPlugin(),
+        new webpack.DefinePlugin({
+            'process.env.API_URL': JSON.stringify(process.env.API_URL),
+        }),
+    ],
 };
