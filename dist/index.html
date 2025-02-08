@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>NLP Analyzer</title>
+    <link rel="stylesheet" href="/src/client/styles/base.css">
+    <link rel="stylesheet" href="/src/client/styles/footer.css">
+    <link rel="stylesheet" href="/src/client/styles/form.css">
+    <link rel="stylesheet" href="/src/client/styles/header.css">
+    <link rel="stylesheet" href="/src/client/styles/resets.css">
+</head>
+<body>
+
+    <header>
+        <div class="">
+            Logo
+        </div>
+        <div class="">
+            navigation
+        </div>
+    </header>
+
+    <main>
+        <section>
+            <form id="urlForm">
+                <input id="name" type="text" name="url" placeholder="Enter URL" required>
+                <button id="submitButton" type="submit">Submit</button>
+            </form>
+            
+        </section>
+
+        <section>
+            <strong>Form Results:</strong>
+            <div id="results"></div>
+        </section>
+    </main>
+
+    <footer>
+        <p>This is a footer</p>
+    </footer>
+    <script src="bundle.js"></script>
+</body>
+</html>
