@@ -1,3 +1,4 @@
+//webpack.config.js
 const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const { CleanWebpackPlugin } = require('clean-webpack-plugin');
@@ -19,11 +20,7 @@ module.exports = {
             },
             {
                 test: /\.s[ac]ss$/i,
-                use: [
-                    'style-loader',
-                    'css-loader',
-                    'sass-loader',
-                ],
+                use: ['style-loader', 'css-loader', 'sass-loader']
             },
         ],
     },
@@ -34,7 +31,7 @@ module.exports = {
         }),
         new CleanWebpackPlugin(),
         new webpack.DefinePlugin({
-            'process.env.API_URL': JSON.stringify(process.env.API_URL),
-        }),
+            'process.env.API_URL': JSON.stringify(process.env.API_URL || 'http://localhost:8081/analyze'),
+        })
     ],
 };

@@ -1,0 +1,26 @@
+form {
+    margin: 7% auto 12px;
+    border: 1px solid #3498db;  // Blue border
+    border-radius: 5px;
+    padding: 45px 12%;
+    color: white;
+    background-color: #2980b9;  // Blue background for form
+}
+
+input {
+    padding: 8px 22px;
+    width: 100%;
+    line-height: 18px;
+    margin: 12px 0;
+    background-color: #f39c12;  // Orange input field background
+}
+
+button {
+    padding: 12px 24px;
+    background-color: #e67e22;  // Orange button background
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-top: 12px;
+}

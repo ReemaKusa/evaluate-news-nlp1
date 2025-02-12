@@ -1,4 +1,4 @@
-//evaluate-news-nlp\starter_project\src\client\js\nameChecker.js
+//src\client\js\nameChecker.js
 
 export function nameChecker(url) {
     const pattern = new RegExp('^(https?:\\/\\/)?'+ // protocol

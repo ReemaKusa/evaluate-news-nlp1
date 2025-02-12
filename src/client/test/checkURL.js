@@ -1,3 +1,4 @@
+//src\client\test\checkURL.js
 import { nameChecker } from '../js/validUrl';
 
 describe('Testing URL Validation', () => {
@@ -14,7 +15,7 @@ describe('Testing URL Validation', () => {
     });
 
     test('Empty input should return false', () => {
-        expect(isValinameCheckerdUrl("")).toBe(false);
+        expect(nameChecker("")).toBe(false);
     });
 
     test('URLs without protocol should still be valid', () => {
